@@ -6,23 +6,23 @@ from datetime import datetime, timedelta
 
 app = FastAPI(title="GA4 Analytics Bridge")
 
-# Serve the frontend files
+# Tells Python where to find your HTML file
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/ga4-report")
 async def get_report():
-    """Returns mock data for portfolio demonstration."""
+    """Generates dynamic mock data for the dashboard demo."""
     data = []
+    # Create 7 days of data
     for i in range(7):
-        date = (datetime.now() - timedelta(days=7-i)).strftime('%Y-%m-%d')
+        date = (datetime.now() - timedelta(days=7-i)).strftime('%b %d')
         data.append({
             "date": date,
-            "sessions": random.randint(150, 450),
-            "conversions": random.randint(5, 25),
-            "engagedSessions": random.randint(100, 300)
+            "sessions": random.randint(150, 600),
+            "conversions": random.randint(5, 45)
         })
     return JSONResponse(content=data)
 
 @app.get("/")
 async def root():
-    return {"message": "API is running. Visit /static/dashboard.html"}
+    return {"status": "online", "message": "Visit /static/dashboard.html"}
